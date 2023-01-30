@@ -1,5 +1,54 @@
 library(tidyverse)
+setwd("D:/Учёба/Экспедиция в Кьуба")
 df <- read_delim("data.csv", delim=";")
+
+
+# BAR PLOT
+
+df %>% 
+  filter(zone=="Dargwa") %>% 
+  filter(`bio: rec` == 1) %>% 
+  filter(lak_standard != 0) %>% 
+  group_by(era, lak_standard) %>%
+  count() %>% 
+  group_by(era) %>%
+  mutate(total = sum(n)) %>% 
+  mutate(percent = round(n/total * 100, 2)) %>%
+  filter(lak_standard == "speak") -> lak_in_dargwa
+lak_in_dargwa
+
+df %>% 
+  filter(zone=="Lak") %>% 
+  filter(`bio: rec` == 1) %>% 
+  filter(tsudakhar_standard != 0) %>% 
+  group_by(era, tsudakhar_standard) %>%
+  count() %>% 
+  group_by(era) %>%
+  mutate(total = sum(n)) %>% 
+  mutate(percent = round(n/total * 100, 2)) %>%
+  filter(tsudakhar_standard == "speak") -> dargwa_in_lak
+dargwa_in_lak
+
+bar_data = data.frame(
+  `Язык`=c("Владение лакским\nсреди цудахарцев",
+           "Владение лакским\nсреди цудахарцев",
+           "Владение цудахарским\nсреди лакцев",
+           "Владение цудахарским\nсреди лакцев"),
+  `Период`=c("До 1919", "После 1920",
+             "До 1919", "После 1920"),
+  `Говорящих (%)`=c(lak_in_dargwa$percent,
+                    dargwa_in_lak$percent)
+  , check.names = FALSE)
+bar_data
+
+p <- ggplot(data=bar_data,
+            aes(x=`Язык`, y=`Говорящих (%)`, fill=`Период`)) +
+  geom_bar(stat="identity", position=position_dodge())
+p
+
+
+# ANALYSIS
+
 df$`year of birth` <- as.numeric(df$`year of birth`)
 df["quran_standard"][df["quran_standard"] == "understand"] <- "read"
 df %>% 
