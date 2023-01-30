@@ -1,6 +1,27 @@
 library(tidyverse)
-setwd("D:/Учёба/Экспедиция в Кьуба")
+library(lingtypology)
+
 df <- read_delim("data.csv", delim=";")
+map_data <- read_delim("map_data.csv", delim = ";")
+
+
+# ZONE MAP
+
+map.feature(
+  languages = map_data$lang,
+  features = map_data$value,
+  title = "Язык села",
+  latitude = map_data$latitude,
+  longitude = map_data$longitude,
+  width = 5,
+  shape = TRUE,
+  color = c("deepskyblue", "indianred1"),
+  label = map_data$village,
+  label.fsize = 15,
+  label.position = "right",
+  label.hide = FALSE,
+  minimap = TRUE
+)
 
 
 # BAR PLOT
