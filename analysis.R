@@ -64,7 +64,8 @@ bar_data
 
 p <- ggplot(data=bar_data,
             aes(x=`Язык`, y=`Говорящих (%)`, fill=`Период`)) +
-  geom_bar(stat="identity", position=position_dodge())
+  geom_bar(stat="identity", position=position_dodge()) +
+  scale_y_continuous(limits = c(0, 50))
 p
 
 
